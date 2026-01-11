@@ -1,5 +1,5 @@
 import React from 'react'
-import DarkModeToggle from '../components/DarkModeToggle'
+import DarkModeToggle from '../components/ui/DarkModeToggle'
 
 export default function RegisterForm() {
     const inputClasses =
