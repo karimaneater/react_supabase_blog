@@ -6,9 +6,6 @@ import RegisterForm from './pages/RegisterForm';
 import HomePage from './pages/HomePage';
 
 function App() {
-
-  
-
   return (
     <>
       <BrowserRouter>
@@ -23,8 +20,6 @@ function App() {
           <Route path="/home" element={<HomePage />} />
         </Routes>
       </BrowserRouter>
-
-  
     </>
   );
 }
