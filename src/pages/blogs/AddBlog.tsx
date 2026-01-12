@@ -6,6 +6,7 @@ import { addBlogs } from '../../redux/blogSlice';
 import { AppDispatch } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import DarkModeToggle from '../../components/DarkModeToggle';
 
 
 export default function AddBlog() {
@@ -41,14 +42,25 @@ export default function AddBlog() {
 
   return (
     <>
-        <div>
-            <form onSubmit={handleAddBlog}>
-                <input className={inputClasses} type="text" name="title" placeholder="Title" value={addNewBlog.title} onChange={handleChange} />
-                <textarea className={inputClasses} name="content" placeholder="Content" value={addNewBlog.content} onChange={handleChange}></textarea>
-                <button 
-                    className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"'
-                    type="submit">Add Blog</button>
-            </form>
+        <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4">
+            <DarkModeToggle />
+            <div className='container mx-auto max-w-lg'>
+                <div className='mt-4'>
+                    <h1 className="text-2xl font-bold mb-4">Add New Blog</h1>
+                </div>
+                <form onSubmit={handleAddBlog}>
+                    <div className='mt-4'>
+                        <input className={inputClasses} type="text" name="title" placeholder="Title" value={addNewBlog.title} onChange={handleChange} />
+                    </div>
+                    <div className='mt-4'>
+                        <textarea className={inputClasses} name="content" placeholder="Content" value={addNewBlog.content} onChange={handleChange}></textarea>
+                    </div>
+                    <button 
+                        className='mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"'
+                        type="submit">Save</button>
+                </form>
+            </div>
+            
         </div>
     </>
   )

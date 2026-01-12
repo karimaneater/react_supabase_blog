@@ -7,7 +7,7 @@ interface User {
 }
 
 interface Blog {
-  id: number;
+  id?: string | number;
   title: string;
   content: string;
 }
