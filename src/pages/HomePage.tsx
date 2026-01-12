@@ -9,10 +9,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <DarkModeToggle />
         <div className="p-4 container mx-auto">
-          HomePage
-          <div>
-            <BlogsList />
-          </div>
+          <BlogsList />
         </div>
       </div>
     </>
