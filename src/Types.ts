@@ -6,6 +6,12 @@ interface User {
   created_at: string;
 }
 
+interface NewUser {
+  name: string;
+  email: string;
+  password: string;
+}
+
 interface Blog {
   id?: string | number;
   title: string;
@@ -17,4 +23,4 @@ interface NewBlog {
   content: string;
 }
 
-export type { User, Blog, NewBlog };
+export type { User, Blog, NewBlog , NewUser};

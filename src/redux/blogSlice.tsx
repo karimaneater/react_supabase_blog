@@ -23,7 +23,9 @@ export const addBlogs = createAsyncThunk<string, NewBlog>(
   async (blog, { rejectWithValue }) => {
     const { error } = await supabase
       .from('blogs')
-      .insert([blog]);
+      .insert([blog])
+      .select()
+      .single();
 
     if (error) {
       console.error('Error adding blog:', error);
