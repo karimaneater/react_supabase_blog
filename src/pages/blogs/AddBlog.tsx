@@ -5,7 +5,7 @@ import { NewBlog } from '../../Types';
 import { addBlogs } from '../../redux/blogSlice';
 import { AppDispatch } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import DarkModeToggle from '../../components/DarkModeToggle';
 
 
