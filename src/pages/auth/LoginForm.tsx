@@ -1,10 +1,16 @@
 import React from 'react'
 import DarkModeToggle from '../../components/DarkModeToggle'
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
     const inputClasses =
   "block w-full rounded-md px-3 py-1.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500 outline outline-1 -outline-offset-1 outline-gray-200 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6";
 
+   const navigate = useNavigate();
+
+   const handleLogin = () => {
+    navigate('/home/blogs');
+   }
   return (
     <>
         <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -59,7 +65,7 @@ export default function LoginForm() {
                     </div>
 
                     <div>
-                        <button
+                        <button onClick={handleLogin}
                         type="submit"
                         className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
