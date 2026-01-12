@@ -4,12 +4,15 @@ import { useDispatch } from 'react-redux'
 import { NewBlog } from '../../Types';
 import { addBlogs } from '../../redux/blogSlice';
 import { AppDispatch } from '../../redux/store';
+import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 export default function AddBlog() {
     const inputClasses =
   "block w-full rounded-md px-3 py-1.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500 outline outline-1 -outline-offset-1 outline-gray-200 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6";
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const [addNewBlog, setAddNewBlog] = useState<NewBlog>({
         title: '',
@@ -23,12 +26,18 @@ export default function AddBlog() {
         }));
     };
 
-    const handleAddBlog = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleAddBlog = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(addNewBlog);
-        dispatch(addBlogs(addNewBlog));
-        setAddNewBlog({ title: '', content: '' });
-    }
+        try {
+            await dispatch(addBlogs(addNewBlog));
+            setAddNewBlog({ title: '', content: '' });
+            toast.success("Saved successfully!");
+            navigate('/home/blogs');
+        } catch (error) {
+            console.error("Error adding blog:", error);
+            toast.error("Failed to save.");
+        }
+    };
 
   return (
     <>

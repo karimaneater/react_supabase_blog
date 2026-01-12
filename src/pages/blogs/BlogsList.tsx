@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchBlogs } from '../../redux/blogSlice';
 import { Blog } from '../../Types';
 import { AppDispatch, RootState } from '../../redux/store';
+import { Toaster } from 'react-hot-toast';
 
 
 export default function BlogsList() {
@@ -17,6 +18,7 @@ export default function BlogsList() {
 
     return (
         <>
+            <Toaster position="top-right" />
             <div className='container mx-auto'>
                 <div>
                     <h1 className="text-2xl font-bold mb-4">Blogs</h1>
