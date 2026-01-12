@@ -1,5 +1,5 @@
 import React from 'react'
-import DarkModeToggle from '../components/ui/DarkModeToggle'
+import DarkModeToggle from '../../components/DarkModeToggle'
 
 export default function LoginForm() {
     const inputClasses =

@@ -7,10 +7,14 @@ interface User {
 }
 
 interface Blog {
-  id: string;
+  id: number;
   title: string;
   content: string;
-  created_at: string;
 }
 
-export type { User, Blog };
+interface NewBlog {
+  title: string;
+  content: string;
+}
+
+export type { User, Blog, NewBlog };

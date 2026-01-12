@@ -1,23 +1,20 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter , Link , Route, Routes } from 'react-router-dom';
-import LoginForm from './auth/LoginForm';
-import RegisterForm from './auth/RegisterForm';
+import { BrowserRouter , Route, Routes } from 'react-router-dom';
+import LoginForm from './pages/auth/LoginForm';
+import RegisterForm from './pages/auth/RegisterForm';
 import HomePage from './pages/HomePage';
+import AddBlog from './pages/blogs/AddBlog';
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        {/* <nav>
-          <h1>React Blog</h1>
-          <Link to="/">Home</Link>
-          <Link to="/create">Add Blog</Link>
-        </nav> */}
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/blogs" element={<HomePage />} />
+          <Route path="/home/blogs/add" element={<AddBlog />} />
         </Routes>
       </BrowserRouter>
     </>
