@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DarkModeToggle from '../../components/DarkModeToggle';
 import { toast, Toaster } from 'react-hot-toast';
-import { editBlogs } from '../../redux/blogSlice';
+import { editBlogs } from '../../redux/Slice/blogSlice';
 import { useNavigate , useParams } from 'react-router-dom';
 import { useDispatch , useSelector} from 'react-redux';
 import { Blog } from '../../Types';

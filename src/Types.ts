@@ -1,13 +1,5 @@
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  created_at: string;
-}
 
-interface NewUser {
-  name: string;
+interface User {
   email: string;
   password: string;
 }
@@ -23,4 +15,4 @@ interface NewBlog {
   content: string;
 }
 
-export type { User, Blog, NewBlog , NewUser};
+export type { User, Blog, NewBlog };

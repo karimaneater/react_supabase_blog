@@ -1,12 +1,12 @@
 import React from 'react'
 import { useEffect , useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchBlogs , deleteBlogs } from '../../redux/blogSlice';
+import { fetchBlogs , deleteBlogs } from '../../redux/Slice/blogSlice';
 import { Blog } from '../../Types';
 import { AppDispatch, RootState } from '../../redux/store';
 import toast, { Toaster } from 'react-hot-toast';
 import ReactPaginate from "react-paginate";
-import { Link } from 'react-router-dom';
+import { data, Link } from 'react-router-dom';
 // import { FaCirclePlus , FaTrashCan } from "react-icons/fa6";
 // import { FaRegEdit } from "react-icons/fa";
 

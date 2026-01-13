@@ -1,20 +1,57 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DarkModeToggle from '../../components/DarkModeToggle'
 import { useNavigate } from 'react-router-dom';
+import supabase from '../../config/supabaseClient';
+import { User } from '../../Types';
+import { useDispatch, useSelector } from 'react-redux'      
+import { AppDispatch, RootState } from '../../redux/store'; 
+import { userLogin } from '../../redux/Slice/userSlice';
 
-export default function LoginForm() {
+export default function LoginForm({ session }: { session: any }) {
     const inputClasses =
   "block w-full rounded-md px-3 py-1.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500 outline outline-1 -outline-offset-1 outline-gray-200 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6";
 
-   const navigate = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+   
 
-   const handleLogin = () => {
-    navigate('/home/blogs');
+    const { status  } = useSelector((state: RootState) => state.users);
+    
+    const [user, setUser] = useState<User>({
+        email: '',
+        password: ''
+    });
+    
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUser((prev) => ({ 
+            ...prev, [name]: value 
+            }));
+    }
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const result = await dispatch(userLogin(user));
+        if (result.payload === "User logged in successfully") {
+            navigate('/home/blogs');
+        } else {
+            alert("Login failed: " + result.payload);
+        }
    }
+
+    useEffect(() => {
+        if (session?.user) {
+            navigate('/home/blogs');
+        }
+    }, [session, navigate]);
+
   return (
     <>
         <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-            <DarkModeToggle />
+            <div className='fixed top-4 right-4 z-50'>
+                <DarkModeToggle />
+            </div>
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -29,7 +66,7 @@ export default function LoginForm() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form action="#" method="POST" className="space-y-6">
+                    <form onSubmit={handleLogin} className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm/6 font-medium">
                         Email address
@@ -42,6 +79,7 @@ export default function LoginForm() {
                             required
                             autoComplete="email"
                             className={inputClasses}
+                            onChange={handleChange}
                         />
                         </div>
                     </div>
@@ -60,16 +98,22 @@ export default function LoginForm() {
                                 required
                                 autoComplete="current-password"
                                 className={inputClasses}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
 
                     <div>
-                        <button onClick={handleLogin}
-                        type="submit"
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                        Sign in
+                        <button 
+                            type="submit"
+                            disabled={status === "loading"}
+                            className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white
+                                            ${status === "loading"
+                                            ? "bg-indigo-400 cursor-not-allowed"
+                                            : "bg-indigo-600 hover:bg-indigo-500"}
+                                        `}
+                            >
+                            {status === "loading" ? <span>Loading...</span> : <span>Sign In</span>}
                         </button>
                     </div>
                     </form>

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import supabase from "../config/supabaseClient";
-import { Blog, NewBlog } from "../Types";
+import supabase from "../../config/supabaseClient";
+import { Blog, NewBlog } from "../../Types";
 
 export const fetchBlogs = createAsyncThunk<Blog[]>(
   'blogs/fetchBlogs',

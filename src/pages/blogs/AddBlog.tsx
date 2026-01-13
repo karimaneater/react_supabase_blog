@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { NewBlog } from '../../Types';
-import { addBlogs } from '../../redux/blogSlice';
+import { addBlogs } from '../../redux/Slice/blogSlice';
 import { AppDispatch } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
