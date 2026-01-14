@@ -6,17 +6,18 @@ import { Blog } from '../../Types';
 import { AppDispatch, RootState } from '../../redux/store';
 import toast, { Toaster } from 'react-hot-toast';
 import ReactPaginate from "react-paginate";
-import { data, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import { FaCirclePlus , FaTrashCan } from "react-icons/fa6";
 // import { FaRegEdit } from "react-icons/fa";
 
-export default function BlogsList() {
-    
+export default function BlogsList( { session }: { session: string | null } ) {
+    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const blogs = useSelector((state: RootState) => state.blogs.blogs);
     const [currentPage, setCurrentPage] = useState(1);
     const [modalId, setModalId] = useState<number | null>(null);
 
+    
     const handleConfirmDelete = async (id: number) => {
         try {
             await dispatch(deleteBlogs(id)).unwrap();
@@ -37,8 +38,13 @@ export default function BlogsList() {
     const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
     useEffect(() => {
-        dispatch(fetchBlogs());
+        // if (!session) {
+        //    navigate("/");
+        //    return;
+        // }
+        dispatch(fetchBlogs());  
     }, [dispatch]);
+
 
     return (
         <>

@@ -41,17 +41,18 @@ export default function LoginForm({ session }: { session: any }) {
    }
 
     useEffect(() => {
-        if (session?.user) {
+        if (session) {
             navigate('/home/blogs');
         }
+        console.log("login session",session);
     }, [session, navigate]);
 
   return (
     <>
         <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-            <div className='fixed top-4 right-4 z-50'>
-                <DarkModeToggle />
-            </div>
+            
+            <DarkModeToggle />
+      
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">

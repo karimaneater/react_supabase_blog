@@ -29,9 +29,9 @@ export const userLogin = createAsyncThunk<string, User>(
 
 export const addUser = createAsyncThunk<string, User>(
     'user/addUser',
-    async (user, { rejectWithValue }) => {
+    async (user , { rejectWithValue } ) => {
 
-        const { error } = await supabase
+        const {error} = await supabase
             .auth
             .signUp({
                 email: user.email,
@@ -40,7 +40,7 @@ export const addUser = createAsyncThunk<string, User>(
            
 
         if (error) {
-            console.error('Error adding user:', error.message);
+            console.error('Error adding user:', error?.message);
             return rejectWithValue(error.message);
         }
         return "User added successfully";
@@ -58,6 +58,7 @@ const userSlice = createSlice({
             })
             .addCase(addUser.fulfilled, (state, action) => {
                 state.status = 'success';
+                state.error = "";
             })
             .addCase(addUser.rejected, (state, action) => {
                 state.status = 'failed';

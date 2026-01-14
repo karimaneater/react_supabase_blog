@@ -2,13 +2,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import supabase from "../../config/supabaseClient";
 import { Blog, NewBlog } from "../../Types";
 
+const userId = supabase.auth.getUser().then(({ data }) => data.user?.id);
+
+ console.log("fetchBlogs user", userId);
 export const fetchBlogs = createAsyncThunk<Blog[]>(
   'blogs/fetchBlogs',
   async (_, { rejectWithValue }) => {
-   
+      const { data: { user } } = await supabase.auth.getUser();
+
+     
+      if (!user) {
+          return rejectWithValue("User not authenticated");
+      }
+
+
       const { data, error } = await supabase
           .from('blogs')
           .select()
+          .eq('user_id', user.id)
           .order("id", { ascending: true });
       if (error) {
         console.error('Error fetching blogs:', error);

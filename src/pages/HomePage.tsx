@@ -8,7 +8,7 @@ export default function HomePage( { session }: { session: string | null } ) {
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <div className='fixed top-4 right-4 z-50 flex space-x-4'>
+        <div className=' flex space-x-4'>
           {session &&
              < Logout />
           }
@@ -17,7 +17,7 @@ export default function HomePage( { session }: { session: string | null } ) {
         </div>
       
         <div className="p-4 container mx-auto">
-          <BlogsList />
+          <BlogsList session={session} />
         </div>
       </div>
     </>
