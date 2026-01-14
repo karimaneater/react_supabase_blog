@@ -2,29 +2,28 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import supabase from "../../config/supabaseClient";
 import { Blog, NewBlog } from "../../Types";
 
-const userId = supabase.auth.getUser().then(({ data }) => data.user?.id);
 
- console.log("fetchBlogs user", userId);
+ 
 export const fetchBlogs = createAsyncThunk<Blog[]>(
   'blogs/fetchBlogs',
   async (_, { rejectWithValue }) => {
       const { data: { user } } = await supabase.auth.getUser();
 
-     
+      console.log("fetchBlogs user reducer", user?.id);
+      
       if (!user) {
           return rejectWithValue("User not authenticated");
       }
-
-
       const { data, error } = await supabase
           .from('blogs')
           .select()
-          .eq('user_id', user.id)
+          .eq('user_id', user?.id)
           .order("id", { ascending: true });
       if (error) {
         console.error('Error fetching blogs:', error);
         return rejectWithValue(error.message);
       }
+      console.log("fetched blogs reducer data", data);
       return data as Blog[];
   },
 );
@@ -32,9 +31,13 @@ export const fetchBlogs = createAsyncThunk<Blog[]>(
 export const addBlogs = createAsyncThunk<string, NewBlog>(
   'blogs/addBlogs',
   async (blog, { rejectWithValue }) => {
+    const { data: { user } } = await supabase.auth.getUser();
+     if (!user) {
+          return rejectWithValue("User not authenticated");
+      }
     const { error } = await supabase
       .from('blogs')
-      .insert([blog])
+      .insert([{ ...blog, user_id: user?.id }])
       .select()
       .single();
 
@@ -50,12 +53,15 @@ export const addBlogs = createAsyncThunk<string, NewBlog>(
 export const editBlogs = createAsyncThunk<Blog, Blog>(
   'blogs/editBlogs',
   async (blog, { rejectWithValue}) => {
+    const { data: { user } } = await supabase.auth.getUser();
+     if (!user) {
+          return rejectWithValue("User not authenticated");
+      }
+
     const { data, error } = await supabase
       .from('blogs')
       .update({ 
-        title: blog.title, 
-        content: blog.content,
-        updated_at: new Date().toISOString()
+        ...blog, updated_at: new Date().toISOString() , user_id: user?.id
       })
       .eq('id', blog.id)
       .select()
@@ -72,6 +78,10 @@ export const editBlogs = createAsyncThunk<Blog, Blog>(
 export const deleteBlogs = createAsyncThunk<string, number>(
   'blogs/deleteBlogs',
   async (id, { rejectWithValue }) => {
+    const { data: { user } } = await supabase.auth.getUser();
+     if (!user) {
+          return rejectWithValue("User not authenticated");
+      }
     const { error } = await supabase
       .from('blogs')
       .delete()
@@ -101,21 +111,6 @@ const blogSlice = createSlice({
       })
       .addCase(editBlogs.fulfilled, (state, action) => {
           state.status = "success";
-          // console.log("UPDATE PAYLOAD", action.payload);
-          // console.log("STATE BLOGS", state.blogs);
-
-          // if (!state.blogs) state.blogs = [];
-
-          // const updatedBlog = {
-          //   ...action.payload,
-          //   id: Number(action.payload.id),
-          // }
-          // const index = state.blogs.findIndex(blog => blog.id === updatedBlog.id);
-          // console.log("FOUND INDEX", index);
-          // console.log("UPDATED BLOG", updatedBlog);
-          // if (index !== -1) {
-          //     state.blogs[index] = updatedBlog;
-          // } 
       })
       .addCase(deleteBlogs.rejected, (state, action) => {
           state.blogs = state.blogs.filter(blog => blog.id !== action.payload);

@@ -23,7 +23,7 @@ export const userLogin = createAsyncThunk<string, User>(
             console.error('Error logging in user:', error.message);
             return rejectWithValue(error.message);
         }
-        return "User logged in successfully";
+        return "success";
     }
 );
 
@@ -43,7 +43,7 @@ export const addUser = createAsyncThunk<string, User>(
             console.error('Error adding user:', error?.message);
             return rejectWithValue(error.message);
         }
-        return "User added successfully";
+        return "success";
     }
 );
 

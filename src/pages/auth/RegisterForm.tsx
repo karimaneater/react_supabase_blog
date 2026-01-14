@@ -29,15 +29,16 @@ export default function RegisterForm() {
 
      const handleAddUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            await dispatch(addUser(addNewUser)).unwrap();
-            setNewUser({ email: '', password: '' });
-            navigate('/');
-            toast.success("Saved successfully!");
-        } catch (error) {
-            console.error("Error adding blog:", error);
-            toast.error("Failed to save.");
-        }
+       
+            const result = await dispatch(addUser(addNewUser));
+
+            if (result.payload === "success"){
+                setNewUser({ email: '', password: '' });
+                navigate('/');
+                toast.success("Saved successfully!");
+            } else {
+                toast.error(result.payload as string);
+            }
     };
   return (
     <>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import DarkModeToggle from '../../components/DarkModeToggle'
 import { useNavigate } from 'react-router-dom';
-import supabase from '../../config/supabaseClient';
 import { User } from '../../Types';
 import { useDispatch, useSelector } from 'react-redux'      
 import { AppDispatch, RootState } from '../../redux/store'; 
 import { userLogin } from '../../redux/Slice/userSlice';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginForm({ session }: { session: any }) {
     const inputClasses =
@@ -33,10 +33,10 @@ export default function LoginForm({ session }: { session: any }) {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         const result = await dispatch(userLogin(user));
-        if (result.payload === "User logged in successfully") {
+        if (result.payload === "success") {
             navigate('/home/blogs');
         } else {
-            alert("Login failed: " + result.payload);
+            toast.error(result.payload as string);
         }
    }
 
@@ -50,7 +50,7 @@ export default function LoginForm({ session }: { session: any }) {
   return (
     <>
         <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-            
+            <Toaster position="top-right"/>
             <DarkModeToggle />
       
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
