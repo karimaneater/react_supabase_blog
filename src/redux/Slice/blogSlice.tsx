@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
 import supabase from "../../config/supabaseClient";
 import { Blog, NewBlog } from "../../Types";
 
@@ -8,8 +8,6 @@ export const fetchBlogs = createAsyncThunk<Blog[]>(
   'blogs/fetchBlogs',
   async (_, { rejectWithValue }) => {
       const { data: { user } } = await supabase.auth.getUser();
-
-      console.log("fetchBlogs user reducer", user?.id);
       
       if (!user) {
           return rejectWithValue("User not authenticated");
@@ -23,7 +21,7 @@ export const fetchBlogs = createAsyncThunk<Blog[]>(
         console.error('Error fetching blogs:', error);
         return rejectWithValue(error.message);
       }
-      console.log("fetched blogs reducer data", data);
+      
       return data as Blog[];
   },
 );
@@ -38,8 +36,6 @@ export const addBlogs = createAsyncThunk<string, NewBlog>(
     const { error } = await supabase
       .from('blogs')
       .insert([{ ...blog, user_id: user?.id }])
-      .select()
-      .single();
 
     if (error) {
       console.error('Error adding blog:', error);
@@ -48,6 +44,30 @@ export const addBlogs = createAsyncThunk<string, NewBlog>(
 
     return "Blog added successfully";
   }
+);
+
+export const viewBlogs = createAsyncThunk<Blog, number>(
+    'blogs/viewBlogs',
+    async (id, {rejectWithValue}) => {
+      // const { data: { user } } = await supabase.auth.getUser();
+      //   if (!user) {
+      //     return rejectWithValue("User not authenticated");
+      //   }
+
+      const {data, error} = await supabase
+        .from('blogs')
+        .select()
+        .eq('id', id)
+        .limit(1)
+        .single();
+
+      if (error){
+        console.error('Error retrieving blog:', error);
+        return rejectWithValue(error.message);
+      }
+
+      return data as Blog;
+    }
 );
 
 export const editBlogs = createAsyncThunk<Blog, Blog>(
@@ -78,10 +98,6 @@ export const editBlogs = createAsyncThunk<Blog, Blog>(
 export const deleteBlogs = createAsyncThunk<string, number>(
   'blogs/deleteBlogs',
   async (id, { rejectWithValue }) => {
-    const { data: { user } } = await supabase.auth.getUser();
-     if (!user) {
-          return rejectWithValue("User not authenticated");
-      }
     const { error } = await supabase
       .from('blogs')
       .delete()
@@ -98,6 +114,7 @@ const blogSlice = createSlice({
   name: "blogs",
   initialState: {
     blogs: [] as Blog[],
+    singleBlog: null as Blog | null,
     status: 'idle' as 'idle' | 'loading' | 'success' | 'failed',
   },
   reducers: {},
@@ -106,13 +123,20 @@ const blogSlice = createSlice({
       .addCase(fetchBlogs.fulfilled, (state, action) => {
           state.blogs = action.payload;
       })
+      .addCase(viewBlogs.pending, (state) => {
+          state.status = "loading";
+                })
+      .addCase(viewBlogs.fulfilled, (state, action) => {
+          state.status = "success";
+          state.singleBlog = action.payload
+      })
       .addCase(addBlogs.fulfilled, (state) => {
           state.status = "success";
       })
       .addCase(editBlogs.fulfilled, (state, action) => {
           state.status = "success";
       })
-      .addCase(deleteBlogs.rejected, (state, action) => {
+      .addCase(deleteBlogs.fulfilled, (state, action) => {
           state.blogs = state.blogs.filter(blog => blog.id !== action.payload);
       });
   },

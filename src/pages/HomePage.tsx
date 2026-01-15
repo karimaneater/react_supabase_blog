@@ -12,7 +12,6 @@ export default function HomePage( { session }: { session: string | null } ) {
           {session &&
              < Logout />
           }
-         
           <DarkModeToggle />
         </div>
       

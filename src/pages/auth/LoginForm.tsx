@@ -44,7 +44,6 @@ export default function LoginForm({ session }: { session: any }) {
         if (session) {
             navigate('/home/blogs');
         }
-        console.log("login session",session);
     }, [session, navigate]);
 
   return (
@@ -70,7 +69,7 @@ export default function LoginForm({ session }: { session: any }) {
                     <form onSubmit={handleLogin} className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm/6 font-medium">
-                        Email address
+                            Email address
                         </label>
                         <div className="mt-2">
                         <input
@@ -86,11 +85,9 @@ export default function LoginForm({ session }: { session: any }) {
                     </div>
 
                     <div>
-                        <div className="flex items-center justify-between">
-                            <label htmlFor="password" className="block text-sm/6 font-medium ">
-                                Password
-                            </label>
-                        </div>
+                        <label htmlFor="password" className="block text-sm/6 font-medium ">
+                            Password
+                        </label>
                         <div className="mt-2">
                             <input
                                 id="password"

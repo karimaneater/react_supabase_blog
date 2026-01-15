@@ -1,5 +1,4 @@
-import React from 'react'
-import { useEffect , useState } from 'react'
+import React, { useEffect , useState }  from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchBlogs , deleteBlogs } from '../../redux/Slice/blogSlice';
 import { Blog } from '../../Types';
@@ -24,7 +23,6 @@ export default function BlogsList( { session }: { session: string | null } ) {
             await dispatch(fetchBlogs()).unwrap();
             toast.success("Blog deleted successfully!");
         } catch (error) {
-            console.error("Error deleting blog:", error);
             toast.error("Failed to delete blog.");
         } finally {
             setModalId(null);
@@ -38,10 +36,10 @@ export default function BlogsList( { session }: { session: string | null } ) {
     const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
     useEffect(() => {
-        // if (!session) {
-        //    navigate("/");
-        //    return;
-        // }
+        if (!session) {
+           navigate("/");
+           return;
+        }
         dispatch(fetchBlogs());  
     }, [dispatch]);
 
@@ -57,30 +55,31 @@ export default function BlogsList( { session }: { session: string | null } ) {
                  <div className='mt-4'>
                     <div className="">
                         <Link to="/home/blogs/add">
-                            <div className="border-b border-gray-300 py-4 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-md">
+                            <div className="border-b border-gray-300 py-4 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-800 p-2">
                                 <div>
                                     <h2 className="text-xl font-bold">Add New Blog...</h2>
                                 </div>
                                 <span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 bg-indigo-600 rounded text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 bg-indigo-600 rounded-full text-white">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                 </span>
                             </div>
                         </Link>
-                        
                         {currentBlogs.map((blog: Blog) => (
-                            <div key={blog.id} className="border-b border-gray-300 py-4 flex justify-between items-center">
-                                <div>
-                                    <h2 className="text-xl font-bold">{blog.title}</h2>
-                                    <p>{blog.content}</p>
-                                </div>
+                            
+                            <div key={blog.id} className="border-b border-gray-300 py-4 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-800 p-2">
+                                <Link to={`/home/blogs/view/${blog.id}`} >
+                                    <div>
+                                        <h2 className="text-xl font-bold">{blog.title}</h2>
+                                        <p className=''>{blog.content}</p>
+                                    </div>
+                                </Link>
                                 <div className="flex items-center mr-4">
-                                    <Link to={`/home/blogs/edit/${blog.id}`} className="bg-indigo-600 text-white px-3 py-1 rounded">
-                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                        <Link to={`/home/blogs/edit/${blog?.id}`} className="bg-indigo-600 text-white px-3 py-1 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                         </svg>
-
                                     </Link>  
                                     <button onClick={() => setModalId(blog.id as number)}  className="ml-4 bg-red-600 text-white px-3 py-1 rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
@@ -105,6 +104,7 @@ export default function BlogsList( { session }: { session: string | null } ) {
                                     )}
                                 </div>
                             </div>
+                           
                         ))}
                         <div className='mt-4'>
                             <ReactPaginate

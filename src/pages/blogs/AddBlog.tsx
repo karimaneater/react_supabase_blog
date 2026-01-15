@@ -44,17 +44,29 @@ export default function AddBlog() {
     <>
         <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4">
             <DarkModeToggle />
-            <div className='container mx-auto max-w-lg'>
+            <div className='container mx-auto max-w-lg '>
                 <div className='mt-4'>
                     <h1 className="text-2xl font-bold mb-4">Add New Blog</h1>
                 </div>
                 <form onSubmit={handleAddBlog}>
-                    <div className='mt-4'>
-                        <input className={inputClasses} type="text" name="title" placeholder="Title" value={addNewBlog.title} onChange={handleChange} />
+                    <div>
+                         <label htmlFor="title" className="block text-sm/6 font-medium">
+                            Title
+                        </label>
+                        <div className='mt-2'>
+                            <input className={inputClasses} type="text" name="title" placeholder="Title" value={addNewBlog.title} onChange={handleChange} />
+                        </div>
                     </div>
-                    <div className='mt-4'>
-                        <textarea className={inputClasses} name="content" placeholder="Content" value={addNewBlog.content} onChange={handleChange}></textarea>
-                    </div>
+                    
+                   <div className='mt-4'>
+                        <label htmlFor="content" className="block text-sm/6 font-medium">
+                            Content
+                        </label>
+                        <div className='mt-2'>
+                            <textarea className={inputClasses} name="content" placeholder="Content" value={addNewBlog.content} onChange={handleChange}></textarea>
+                        </div>
+                   </div>
+                    
                     <button 
                         className='mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"'
                         type="submit">Save</button>

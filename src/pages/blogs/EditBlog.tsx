@@ -6,7 +6,7 @@ import { useNavigate , useParams } from 'react-router-dom';
 import { useDispatch , useSelector} from 'react-redux';
 import { Blog } from '../../Types';
 import { AppDispatch , RootState} from '../../redux/store';
-import supabase from '../../config/supabaseClient';
+
 
 
 export default function EditBlog() {
@@ -31,23 +31,7 @@ export default function EditBlog() {
             setEditBlog({ 
                ...blogToEdit
             });
-        } else {
-            const fetchSingleBlog = async () => {
-            const { data, error } = await supabase
-                .from('blogs')
-                .select()
-                .eq('id', Number(id))
-                .single();
-
-            if (error) {
-                toast.error('Failed to load blog');
-                return;
-            }
-                setEditBlog({ ...data });
-            };
-
-            fetchSingleBlog();
-        }
+        } 
         
     }, [id, blogs]);
 
@@ -70,7 +54,6 @@ export default function EditBlog() {
             toast.success("Edit successfully!");
             navigate('/home/blogs');
         } catch (error) {
-            console.error("Error adding blog:", error);
             toast.error("Failed to save.");
         }
     };
@@ -85,18 +68,28 @@ export default function EditBlog() {
                     <h1 className="text-2xl font-bold mb-4">Edit Blog</h1>
                 </div>
                 <form onSubmit={handleEditBlog}>
-                    <div className='mt-4'>
-                        <input className={inputClasses} type="text" value={editBlog.title} name="title" placeholder="Title" onChange={handleChange} />
+                    <div>
+                        <label htmlFor="title" className="block text-sm/6 font-medium">
+                            Title
+                        </label>
+                        <div className='mt-2'>
+                            <input className={inputClasses} type="text" value={editBlog.title} name="title" placeholder="Title" onChange={handleChange} />
+                        </div>
                     </div>
                     <div className='mt-4'>
-                        <textarea className={inputClasses} value={editBlog.content} name="content" placeholder="Content" onChange={handleChange}></textarea>
+                        <label htmlFor="content" className="block text-sm/6 font-medium">
+                            Content
+                        </label>
+                        <div className='mt-2'>
+                            <textarea className={inputClasses} value={editBlog.content} name="content" placeholder="Content" onChange={handleChange}></textarea>
+                        </div>
                     </div>
+                   
                     <button 
                         className='mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"'
                         type="submit">Save</button>
                 </form>
-            </div>
-            
+            </div> 
         </div>
     </>
   )

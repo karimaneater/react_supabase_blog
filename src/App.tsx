@@ -4,11 +4,12 @@ import { BrowserRouter , Route, Routes } from 'react-router-dom';
 import LoginForm from './pages/auth/LoginForm';
 import RegisterForm from './pages/auth/RegisterForm';
 import HomePage from './pages/HomePage';
+import ViewBlog from './pages/blogs/ViewBlog';
 import AddBlog from './pages/blogs/AddBlog';
 import EditBlog from './pages/blogs/EditBlog';
-import { BlogsLogger } from './redux/BlogsLogger';
 import ProtectedRoute from './components/ProtectedRoutes';
 import supabase from './config/supabaseClient';
+
 
 function App() {
     
@@ -30,7 +31,6 @@ function App() {
 
   return (
     <>
-      <BlogsLogger />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginForm session={session} />} />
@@ -38,6 +38,7 @@ function App() {
           <Route element={<ProtectedRoute token={session} />}>
             <Route path="/home/blogs" element={<HomePage session={session}/>} />
             <Route path="/home/blogs/add" element={<AddBlog />} />
+            <Route path="/home/blogs/view/:id" element={<ViewBlog />} />
             <Route path="/home/blogs/edit/:id" element={<EditBlog />} />
          </Route> 
         </Routes>
