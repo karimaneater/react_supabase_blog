@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch , useSelector } from 'react-redux'
 import { NewBlog } from '../../Types';
 import { addBlogs } from '../../redux/Slice/blogSlice';
-import { AppDispatch } from '../../redux/store';
+import { AppDispatch , RootState } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import DarkModeToggle from '../../components/DarkModeToggle';
@@ -14,17 +14,18 @@ export default function AddBlog() {
   "block w-full rounded-md px-3 py-1.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-500 outline outline-1 -outline-offset-1 outline-gray-200 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6";
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-
+    const { status }= useSelector((state: RootState) => state.blogs);
+    
     const [addNewBlog, setAddNewBlog] = useState<NewBlog>({
         title: '',
         content: ''
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setAddNewBlog((prev) => ({ 
-        ...prev, [name]: value 
-        }));
+        const { name, value } = e.target;
+        setAddNewBlog((prev) => ({ 
+            ...prev, [name]: value 
+            }));
     };
 
     const handleAddBlog = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +36,6 @@ export default function AddBlog() {
             toast.success("Saved successfully!");
             navigate('/home/blogs');
         } catch (error) {
-            console.error("Error adding blog:", error);
             toast.error("Failed to save.");
         }
     };
@@ -54,7 +54,7 @@ export default function AddBlog() {
                             Title
                         </label>
                         <div className='mt-2'>
-                            <input className={inputClasses} type="text" name="title" placeholder="Title" value={addNewBlog.title} onChange={handleChange} />
+                            <input className={inputClasses} type="text" name="title" placeholder="Title" value={addNewBlog.title} onChange={handleChange} required/>
                         </div>
                     </div>
                     
@@ -63,13 +63,19 @@ export default function AddBlog() {
                             Content
                         </label>
                         <div className='mt-2'>
-                            <textarea className={inputClasses} name="content" placeholder="Content" value={addNewBlog.content} onChange={handleChange}></textarea>
+                            <textarea className={inputClasses} name="content" placeholder="Content" value={addNewBlog.content} onChange={handleChange} required></textarea>
                         </div>
                    </div>
                     
                     <button 
-                        className='mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"'
-                        type="submit">Save</button>
+                        className={`mt-4 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white
+                                    ${status === "loading"
+                                    ? "bg-indigo-400 cursor-not-allowed"
+                                    : "bg-indigo-600 hover:bg-indigo-500"}
+                                `}
+                        type="submit">
+                        {status === "loading" ? <span>Loading...</span> : <span>Save</span>}
+                    </button>
                 </form>
             </div>
             

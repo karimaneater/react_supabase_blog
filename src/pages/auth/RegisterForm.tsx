@@ -31,7 +31,7 @@ export default function RegisterForm() {
         e.preventDefault();
        
             const result = await dispatch(addUser(addNewUser));
-
+            console.log("Reg form res:", result);
             if (result.payload === "success"){
                 setNewUser({ email: '', password: '' });
                 navigate('/');

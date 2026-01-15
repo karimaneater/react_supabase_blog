@@ -4,11 +4,6 @@ import supabase from "../../config/supabaseClient";
 import { User } from "../../Types";
 
 
-const initialState = {
-    user: null as User | null,
-    status: 'idle' as 'idle' | 'loading' | 'success' | 'failed',
-    error: null as string | null,
-};
 
 export const userLogin = createAsyncThunk<string, User>(
     'user/userLogin',
@@ -49,10 +44,15 @@ export const addUser = createAsyncThunk<string, User>(
 
 const userSlice = createSlice({
     name: 'user',
-    initialState,
+    initialState:{
+        user: null as User | null,
+        status: 'idle' as 'idle' | 'loading' | 'success' | 'failed',
+        error: null as string | null,
+    },
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // addUser 
             .addCase(addUser.pending, (state) => {
                 state.status = "loading";
             })
@@ -63,6 +63,7 @@ const userSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload as string;
             })
+            // userLogin 
             .addCase(userLogin.pending, (state) => {
                 state.status = "loading";
             })

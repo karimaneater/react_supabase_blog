@@ -6,22 +6,20 @@ import { AppDispatch, RootState } from '../../redux/store';
 import toast, { Toaster } from 'react-hot-toast';
 import ReactPaginate from "react-paginate";
 import { Link, useNavigate } from 'react-router-dom';
-// import { FaCirclePlus , FaTrashCan } from "react-icons/fa6";
-// import { FaRegEdit } from "react-icons/fa";
+
 
 export default function BlogsList( { session }: { session: string | null } ) {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-    const blogs = useSelector((state: RootState) => state.blogs.blogs);
+    const allBlogs = useSelector((state: RootState) => state.blogs);
     const [currentPage, setCurrentPage] = useState(1);
     const [modalId, setModalId] = useState<number | null>(null);
 
-    
     const handleConfirmDelete = async (id: number) => {
         try {
-            await dispatch(deleteBlogs(id)).unwrap();
+            const res = await dispatch(deleteBlogs(id)).unwrap();
             await dispatch(fetchBlogs()).unwrap();
-            toast.success("Blog deleted successfully!");
+            toast.success(res);
         } catch (error) {
             toast.error("Failed to delete blog.");
         } finally {
@@ -30,10 +28,10 @@ export default function BlogsList( { session }: { session: string | null } ) {
     };
 
     const blogsPerPage = 5;
-    const totalPages = Math.ceil(blogs.length / blogsPerPage);
+    const totalPages = Math.ceil(allBlogs.blogs.length / blogsPerPage);
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-    const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+    const currentBlogs = allBlogs.blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
     useEffect(() => {
         if (!session) {
@@ -66,12 +64,15 @@ export default function BlogsList( { session }: { session: string | null } ) {
                                 </span>
                             </div>
                         </Link>
-                        {currentBlogs.map((blog: Blog) => (
+                        {
+                        allBlogs.status === "loading" ?
+                        <div className='text-xl font-bold text-center'>Loading...</div> :
+                        currentBlogs.map((blog: Blog) => (
                             
                             <div key={blog.id} className="border-b border-gray-300 py-4 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-800 p-2">
                                 <Link to={`/home/blogs/view/${blog.id}`} >
-                                    <div>
-                                        <h2 className="text-xl font-bold">{blog.title}</h2>
+                                    <div className=''>
+                                        <h2 className="text-xl font-bold ">{blog.title}</h2>
                                         <p className=''>{blog.content}</p>
                                     </div>
                                 </Link>

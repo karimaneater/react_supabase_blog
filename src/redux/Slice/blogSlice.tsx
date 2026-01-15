@@ -120,9 +120,15 @@ const blogSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // fetchBlogs 
+      .addCase(fetchBlogs.pending, (state) => {
+            state.status = "loading";
+      })
       .addCase(fetchBlogs.fulfilled, (state, action) => {
+          state.status = "success";
           state.blogs = action.payload;
       })
+      // viewBlogs 
       .addCase(viewBlogs.pending, (state) => {
           state.status = "loading";
                 })
@@ -130,14 +136,24 @@ const blogSlice = createSlice({
           state.status = "success";
           state.singleBlog = action.payload
       })
+      // addBlogs 
+      .addCase(addBlogs.pending, (state) => {
+          state.status = "loading";
+      })
       .addCase(addBlogs.fulfilled, (state) => {
           state.status = "success";
+      })
+      // editBlogs 
+      .addCase(editBlogs.pending, (state, action) => {
+          state.status = "loading";
       })
       .addCase(editBlogs.fulfilled, (state, action) => {
           state.status = "success";
       })
+      // deleteBlogs
       .addCase(deleteBlogs.fulfilled, (state, action) => {
-          state.blogs = state.blogs.filter(blog => blog.id !== action.payload);
+          // state.blogs = state.blogs.filter(blog => blog.id !== action.payload);
+          state.status = "success";
       });
   },
 });
