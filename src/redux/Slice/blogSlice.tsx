@@ -9,14 +9,17 @@ export const fetchBlogs = createAsyncThunk<Blog[]>(
   async (_, { rejectWithValue }) => {
       const { data: { user } } = await supabase.auth.getUser();
       
+      // console.log("from blogslice users:",user?.id);
       if (!user) {
           return rejectWithValue("User not authenticated");
       }
-      const { data, error } = await supabase
+      const { data , error } = await supabase
           .from('blogs')
-          .select()
-          .eq('user_id', user?.id)
-          .order("id", { ascending: true });
+          .select('*')
+          // .eq('user_id', user?.id)
+          .order("created_at", { ascending: false });
+
+          
       if (error) {
         console.error('Error fetching blogs:', error);
         return rejectWithValue(error.message);
@@ -36,6 +39,7 @@ export const addBlogs = createAsyncThunk<string, NewBlog>(
     const { error } = await supabase
       .from('blogs')
       .insert([{ ...blog, user_id: user?.id }])
+      .select()
 
     if (error) {
       console.error('Error adding blog:', error);
@@ -110,9 +114,11 @@ export const deleteBlogs = createAsyncThunk<string, number>(
   }
 );
 
+
+
 const blogSlice = createSlice({
   name: "blogs",
-  initialState: {
+  initialState:{
     blogs: [] as Blog[],
     singleBlog: null as Blog | null,
     status: 'idle' as 'idle' | 'loading' | 'success' | 'failed',

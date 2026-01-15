@@ -13,7 +13,7 @@ export const userLogin = createAsyncThunk<string, User>(
             .signInWithPassword({
                 email: user.email,
                 password: user.password,
-            })
+            });
         if (error) {
             console.error('Error logging in user:', error.message);
             return rejectWithValue(error.message);
@@ -31,7 +31,7 @@ export const addUser = createAsyncThunk<string, User>(
             .signUp({
                 email: user.email,
                 password: user.password,
-            })
+            });
            
 
         if (error) {
@@ -41,6 +41,8 @@ export const addUser = createAsyncThunk<string, User>(
         return "success";
     }
 );
+
+
 
 const userSlice = createSlice({
     name: 'user',

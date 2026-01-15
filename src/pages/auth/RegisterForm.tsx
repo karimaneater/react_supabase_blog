@@ -65,7 +65,7 @@ export default function RegisterForm() {
 
                         <div>
                             <label htmlFor="email" className="block text-sm/6 font-medium">
-                                Email 
+                                Email address
                             </label>
                             <div className="mt-2">
                             <input
